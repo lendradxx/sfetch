@@ -1,2 +1,5 @@
-bin
+dist
 .env
+.cache
+main.spec
+state.conf
