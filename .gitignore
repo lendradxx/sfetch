@@ -3,3 +3,4 @@ dist
 .cache
 main.spec
 state.conf
+__pycache__
