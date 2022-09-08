@@ -1,41 +1,58 @@
-import platform
+import os, psutil, platform
+from xml.etree.ElementInclude import include
 
 
-class User:
-    """
-    Class user include information about user account on the system,\n
-    such like username, hostname, account type, group, and many more
-    """
-
-    def __init__(self, sep: str = ":") -> None:
-        self.sep = sep
-        pass
-
-    def Generate(self):
-        pass
+def GetUsername():
+    return os.getenv("USER")
 
 
-class Software:
-    """
-    Class software include information about software on the system,\n
-    suck like distro name, kernel version, total installed package, and many more
-    """
-
-    def __init__(self) -> None:
-        pass
-
-    def Generate(self):
-        pass
+def GetHostname():
+    return os.popen("hostname").read().replace("\n", "")
 
 
-class Hardware:
-    """
-    Class hardware include information about hardware on the system,\n
-    suck like ram, model/vendor, storage, cpu, gpu and many more
-    """
+def GetKernelInfo():
+    return platform.release()
 
-    def __init__(self) -> None:
-        pass
 
-    def Generate(self):
-        pass
+def GetDistroName():
+    return platform.freedesktop_os_release()["NAME"]
+
+
+def GetOSType():
+    return platform.system()
+
+
+def GetUserType():
+    user_id: str = os.popen("id").read()
+
+    if not user_id.find("wheel"):
+        return "Standard"
+
+    return "Admin"
+
+
+def GetPackagesInfo():
+    pass
+
+
+def GetMemoryInfo():
+    RawRAM = os.popen('free -t -m | grep "Mem"').read().split(" ")
+    RawRAM = list(filter(None, RawRAM))
+    RawSwap = os.popen('free -t -m | grep "Swap"').read().split(" ")
+    RawSwap = list(filter(None, RawSwap))
+
+    return {
+        "ram": {
+            "total": RawRAM[1],
+            "used": RawRAM[2],
+            "free": RawRAM[3],
+            "shared": RawRAM[4],
+            "buff": RawRAM[5],
+            "available": RawRAM[6],
+        },
+        "swap": {
+            "total": RawSwap[1],
+            "used": RawSwap[2],
+            "free": RawSwap[3],
+        },
+    }

@@ -92,9 +92,12 @@ function ArchInstall() {
 
     # Prompt if user want to install in root or user dir
     TARGET="user"
-    PromptTarget=$(Input "Do you want install this program on root dir? [y/n]: ")
-    if [[ $PromptTarget == "y" || $PromptTarget == "Y" ]]; then
-        TARGET="root"
+
+    if [[ ! $1 ]]; then
+        PromptTarget=$(Input "Do you want install this program on root dir? [y/n]: ")
+        if [[ $PromptTarget == "y" || $PromptTarget == "Y" ]]; then
+            TARGET="root"
+        fi
     fi
 
     log "Check if local environment existed..."
@@ -116,6 +119,11 @@ function ArchInstall() {
 # Determine Install Method
 case $DISTRO_ID in
 "arch")
+    if [[ $1 == "--local" ]]; then
+        ArchInstall "local"
+        exit 0
+    fi
+
     ArchInstall
     ;;
 *)
