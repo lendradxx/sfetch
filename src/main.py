@@ -1,3 +1,4 @@
+import os
 from lib.packagemanager import GetPackageManagerList, GetTotalPackages
 from lib.system import GetDistroColor, GetDistroName, GetHostname, GetKernelInfo, GetMemoryInfo, GetOSType, GetParentDistro, GetUserType, GetUsername
 from utils.generator import GenerateLine
@@ -11,14 +12,14 @@ if __name__ == "__main__":
     # swapUsagePercent =
 
     title = f"USER: {GetUsername()}@{GetHostname()} ({GetUserType()})"
-    os = f"OS: {GetOSType()} ({GetDistroName()})"
+    os_raw = f"OS: {GetOSType()} ({GetDistroName()})"
     kernel = f"Kernel: {GetKernelInfo()}"
     packages = f"Packages: {GetTotalPackages(GetPackageManagerList())}"
     ram = f"RAM: {ramInfo['used']} MB / {ramInfo['total']} MB ({ramUsagePercent:.0f}%)"
     swap = f"SWAP: {swapInfo['used']} MB / {swapInfo['total']} MB ({swapUsagePercent:.0f}%)"
-    lineLength = max([len(title), len(os), len(kernel), len(ram), len(swap), len(packages)])
+    lineLength = max([len(title), len(os_raw), len(kernel), len(ram), len(swap), len(packages)])
 
-    headerLength = f"{GenerateLine('─', int(lineLength/2))}[ I use {GetParentDistro()} btw ]{GenerateLine('─', int(lineLength/2))}"
+    headerLength = len(f"{GenerateLine('─', int(lineLength/2))}[ I use {GetParentDistro()} btw ]{GenerateLine('─', int(lineLength/2))}")
 
     # Prompt Result
     print(
@@ -29,6 +30,6 @@ if __name__ == "__main__":
         f"{Style.BRIGHT}\33[{GetDistroColor()}m├─ Packages{Style.RESET_ALL}: {GetTotalPackages(GetPackageManagerList())}",
         f"{Style.BRIGHT}\33[{GetDistroColor()}m├─ RAM{Style.RESET_ALL}: {Style.BRIGHT}{Fore.RED}{ramInfo['used']}{Style.RESET_ALL} MB / {Style.BRIGHT}{Fore.GREEN}{ramInfo['total']}{Style.RESET_ALL} MB ({ramUsagePercent:.1f}%)",
         f"{Style.BRIGHT}\33[{GetDistroColor()}m├─ Swap{Style.RESET_ALL}: {Style.BRIGHT}{Fore.RED}{swapInfo['used']}{Style.RESET_ALL} MB / {Style.BRIGHT}{Fore.GREEN}{swapInfo['total']}{Style.RESET_ALL} MB ({swapUsagePercent:.1f}%)",
-        f"{Style.BRIGHT}\33[{GetDistroColor()}m└{GenerateLine('─', len(headerLength))}┘",
+        f"{Style.BRIGHT}\33[{GetDistroColor()}m└{GenerateLine('─', headerLength)}┘",
         sep="\n",
     )
