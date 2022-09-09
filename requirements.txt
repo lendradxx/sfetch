@@ -1,2 +1,4 @@
+psutil==5.9.2
 pyinstaller==5.3
 pip-autoremove==0.10.0
+colorama==0.4.5
