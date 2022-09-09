@@ -18,6 +18,17 @@ def GetDistroName():
     return platform.freedesktop_os_release()["NAME"]
 
 
+def GetParentDistro():
+    if not platform.freedesktop_os_release()["ID_LIKE"]:
+        return
+
+    return platform.freedesktop_os_release()["ID_LIKE"].capitalize()
+
+
+def GetDistroColor():
+    return platform.freedesktop_os_release()["ANSI_COLOR"]
+
+
 def GetOSType():
     return platform.system()
 
